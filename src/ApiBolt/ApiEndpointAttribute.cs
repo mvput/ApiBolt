@@ -8,4 +8,3 @@ public class ApiEndpointAttribute(ApiEndpointType apiEndpointType, string patter
     public ApiEndpointType ApiEndpointType { get; } = apiEndpointType;
     public string Pattern { get; } = pattern;
 }
-

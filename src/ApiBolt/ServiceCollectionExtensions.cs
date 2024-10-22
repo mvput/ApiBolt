@@ -1,8 +1,8 @@
 ﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
 
-using System.Reflection;
 using ApiBolt.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace ApiBolt;
 

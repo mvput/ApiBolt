@@ -1,10 +1,10 @@
 ﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
 
-using System.Collections.Immutable;
-using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Text;
 
 namespace ApiBolt.SourceGenerator;
 
@@ -25,14 +25,13 @@ public class ApiEndpointGenerator : IIncrementalGenerator
     private static ApiEndpointToGenerate? GetApiToGenerate(GeneratorAttributeSyntaxContext context)
     {
         var methodDeclarationSyntax = (MethodDeclarationSyntax)context.TargetNode;
-        
+
         if (methodDeclarationSyntax.Parent is null)
         {
             return null;
         }
-        
-        var classDeclarationSyntax = (ClassDeclarationSyntax)methodDeclarationSyntax.Parent;
 
+        var classDeclarationSyntax = (ClassDeclarationSyntax)methodDeclarationSyntax.Parent;
 
         if (context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol namedTypeSymbol)
             return null;
@@ -45,23 +44,25 @@ public class ApiEndpointGenerator : IIncrementalGenerator
             return null;
         }
 
-    return new ApiEndpointToGenerate(endpointName, GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern);
+        var name = methodDeclarationSyntax.Identifier.ValueText;
+
+        return new ApiEndpointToGenerate(endpointName, GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern, name, methodDeclarationSyntax.ParameterList); ;
     }
 
     private static ApiEndpointAttribute? GetAttribute(SemanticModel semanticModel, MethodDeclarationSyntax methodDeclarationSyntax)
     {
         foreach (var attributeSyntax in methodDeclarationSyntax.AttributeLists.SelectMany(attributelistSyntax => attributelistSyntax.Attributes))
         {
-            var arguments = attributeSyntax.ArgumentList!.Arguments!;
+            if (attributeSyntax.ArgumentList is null) continue;
 
+            var endpointType = attributeSyntax.ArgumentList.Arguments.First();
+            var pattern = attributeSyntax.ArgumentList.Arguments.Last();
 
-
-            return new ApiEndpointAttribute(ApiEndpointType.Get, "/riskprofile");
+            return new ApiEndpointAttribute((ApiEndpointType)Enum.Parse(typeof(ApiEndpointType), endpointType.Expression.GetLastToken().ValueText), pattern.Expression.NormalizeWhitespace().ToFullString());
         }
 
         return null;
     }
-
 
     private static void Execute(ApiEndpointToGenerate? apiEndpointToGenerate, SourceProductionContext context)
     {
