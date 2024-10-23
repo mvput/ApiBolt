@@ -27,7 +27,7 @@ jobs:
       uses: gittools/actions/gitversion/execute@v3.0.0
 
     - name: Pack
-      run: dotnet pack -c Release -p:version=${{ env.semVer }} -o out
+      run: dotnet pack -c Release -p:version=${{ env.semVer }}
 
     - name: Push NuGet
       run: dotnet nuget push */bin/Release/*.nupkg -k $NUGET_AUTH_TOKEN -s https://api.nuget.org/v3/index.json
