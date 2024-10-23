@@ -41,7 +41,7 @@ internal class GetWeatherEndpoint : IApiEndpoint
     [ApiEndpoint(ApiEndpointType.Get, "/weather")]
     public string GetWeatherAsync()
     {
-        return "Current weather is 14 degrees celsius";
+        return $"Current weather in AMS is 14 degrees celsius";
     }
 }
 ```
@@ -61,7 +61,7 @@ public class GetWeatherEndpointRegistration : IApiEndpointRegistration
 All the parameters passed into the method, are mapped to the API call. So for example
 
 ```c#
-internal class GetWeatherEndpoint : IApiEndpoint
+internal class GetWeatherForCityEndpoint : IApiEndpoint
 {
     [ApiEndpoint(ApiEndpointType.Get, "/weather/{city}")]
     public string GetWeatherAsync(string city, [FromQuery] int temp)
@@ -74,11 +74,11 @@ internal class GetWeatherEndpoint : IApiEndpoint
 Generates the following output.
 
 ```c#
-public class GetWeatherEndpointRegistration : IApiEndpointRegistration
+public class GetWeatherForCityEndpointRegistration : IApiEndpointRegistration
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/weather/{city}", (string city, [FromQuery] int temp, [FromServices] GetWeatherEndpoint endpoint) => endpoint.GetWeatherAsync(city, temp));
+        app.MapGet("/weather/{city}", (string city, [FromQuery] int temp, [FromServices] GetWeatherForCityEndpoint endpoint) => endpoint.GetWeatherAsync(city, temp));
     }
 }
 ```
