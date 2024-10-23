@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Routing;
 
-namespace ApiBolt.Abstractions;
+namespace ApiBolt.AspNetCore.Abstractions;
 
 public interface IApiEndpointRegistration
 {

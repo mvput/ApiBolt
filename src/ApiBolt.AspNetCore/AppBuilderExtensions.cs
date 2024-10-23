@@ -1,8 +1,9 @@
 ﻿using ApiBolt.Abstractions;
+using ApiBolt.AspNetCore.Abstractions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ApiBolt;
+namespace ApiBolt.AspNetCore;
 
 public static class AppBuilderExtensions
 {

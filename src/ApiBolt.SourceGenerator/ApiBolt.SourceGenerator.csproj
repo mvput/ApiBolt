@@ -1,23 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework> 
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> 
+	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+	<Authors>mvput</Authors>
+	<Copyright>mvput</Copyright>
+	<PackageProjectUrl>https://github.com/mvput/ApiBolt</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/mvput/ApiBolt</RepositoryUrl>
+	<RepositoryType>https://github.com/mvput/ApiBolt.git</RepositoryType>
+	<PackageTags>endpoint;repr;api;minimalapi;minimal-api</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
-
   </ItemGroup>
 
   <ItemGroup>
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ApiBolt\ApiBolt.csproj" />
   </ItemGroup>
 
 </Project>

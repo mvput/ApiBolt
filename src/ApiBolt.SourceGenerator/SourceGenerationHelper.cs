@@ -59,7 +59,7 @@ public static class SourceGenerationHelper
         var root = NamespaceDeclaration(ParseName(value.Ns))
             .AddMembers(@class)
             .AddUsings(
-                UsingDirective(ParseName("ApiBolt.Abstractions")),
+                UsingDirective(ParseName("ApiBolt.AspNetCore.Abstractions")),
                 UsingDirective(ParseName("Microsoft.AspNetCore.Mvc")),
                 UsingDirective(ParseName("Microsoft.AspNetCore.Routing"))
             );

@@ -1,10 +1,11 @@
 ﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
 
-using ApiBolt.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using ApiBolt.Abstractions;
+using ApiBolt.AspNetCore.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ApiBolt;
+namespace ApiBolt.AspNetCore;
 
 public static class ServiceCollectionExtensions
 {

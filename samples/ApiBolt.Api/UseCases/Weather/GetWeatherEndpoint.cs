@@ -8,8 +8,8 @@ namespace ApiBolt.Api.UseCases.Weather;
 internal class GetWeatherEndpoint : IApiEndpoint
 {
     [ApiEndpoint(ApiEndpointType.Get, "/weather")]
-    public async Task<string> GetWeatherAsync()
+    public string GetWeatherAsync()
     {
-        return $"Current weather is 14 degrees celcius";
+        return "Current weather is 14 degrees celsius";
     }
 }
