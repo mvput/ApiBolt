@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <LangVersion>latest</LangVersion>
+	  <Authors>mvput</Authors>
+	  <Copyright>mvput</Copyright>
+	  <PackageProjectUrl>https://github.com/mvput/ApiBolt</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/mvput/ApiBolt</RepositoryUrl>
+	  <RepositoryType>https://github.com/mvput/ApiBolt.git</RepositoryType>
+	  <PackageTags>endpoint;repr;api;minimalapi;minimal-api</PackageTags>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+</Project>
