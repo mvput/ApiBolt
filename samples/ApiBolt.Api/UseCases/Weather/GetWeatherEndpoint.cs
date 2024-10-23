@@ -7,9 +7,9 @@ namespace ApiBolt.Api.UseCases.Weather;
 
 internal class GetWeatherEndpoint : IApiEndpoint
 {
-    [ApiEndpoint(ApiEndpointType.Get, "/weather")]
-    public string GetWeatherAsync()
+    [ApiEndpoint(ApiEndpointType.Get, "/weather/{city}")]
+    public string GetWeatherAsync(string city, [FromQuery] int temp)
     {
-        return "Current weather is 14 degrees celsius";
+        return $"Current weather in {city} is {temp} degrees celsius";
     }
 }
