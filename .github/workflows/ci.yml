@@ -28,4 +28,4 @@ jobs:
       uses: gittools/actions/gitversion/execute@v3.0.0
 
     - name: Pack
-      run: dotnet pack -c Release -p:version=${{ env.semVer }}"
+      run: dotnet pack -c Release -p:version=${{ env.semVer }}
