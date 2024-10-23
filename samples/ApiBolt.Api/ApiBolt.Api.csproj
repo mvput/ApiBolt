@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiBolt.SourceGenerator\ApiBolt.SourceGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-    <ProjectReference Include="..\ApiBolt\ApiBolt.csproj" />
+    <ProjectReference Include="..\..\src\ApiBolt.SourceGenerator\ApiBolt.SourceGenerator.csproj"  ReferenceOutputAssembly="false" OutputItemType="Analyzer"  />
+    <ProjectReference Include="..\..\src\ApiBolt\ApiBolt.csproj" />
   </ItemGroup>
 
 </Project>
