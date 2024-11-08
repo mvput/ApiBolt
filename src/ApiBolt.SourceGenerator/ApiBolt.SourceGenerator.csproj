@@ -15,7 +15,7 @@
 	<RepositoryType>https://github.com/mvput/ApiBolt.git</RepositoryType>
 	<PackageTags>endpoint;repr;api;minimalapi;minimal-api</PackageTags>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
-      <PackageIconUrl>https://github.com/mvput/ApiBolt/raw/main/update/logo.png</PackageIconUrl>
+      <PackageIcon>logo.png</PackageIcon>
     <Description>ApiBolt uses incremental source generators to generate Minimal API mapping for endpoints as Request-Endpoint-Response (REPR pattern).</Description>
   </PropertyGroup>  
 
@@ -27,6 +27,7 @@
   <ItemGroup>
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+     <None Include="..\..\logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
