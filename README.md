@@ -8,8 +8,8 @@ ApiBolt uses incremental source generators to generate Minimal API mapping for e
 To use the ApiBolt source generator, install the `ApiBolt.AspNetCore` package and the `ApiBolt.SourceGenerator` package into your API project.
 
 ```powershell
-dotnet add package ApiBolt.AspNetCore --version 0.1.0
-dotnet add package ApiBolt.SourceGenerator --version 0.1.0
+dotnet add package ApiBolt.AspNetCore --version 0.2.0
+dotnet add package ApiBolt.SourceGenerator --version 0.2.0
 ```
 
 # Usage
@@ -82,4 +82,31 @@ public class GetWeatherForCityEndpointRegistration : IApiEndpointRegistration
     }
 }
 ```
+To configure the endpoint after the Map, add the `IApiEndpointConvention` interface and add the `` method
+```c#
+internal class GetWeatherEndpoint : IApiEndpoint, IApiEndpointConvention
+{
+    [ApiEndpoint(ApiEndpointType.Get, "/weather")]
+    public string GetWeatherAsync()
+    {
+        return $"Current weather in AMS is 14 degrees celsius";
 
+    }
+    public static void Configure(IEndpointConventionBuilder builder)
+    {
+        builder.RequireAuthorization(policy => policy.RequireAuthenticatedUser());
+    }
+}
+```
+
+Generates the following output.
+```c#
+public class GetWeatherEndpointRegistration : IApiEndpointRegistration
+{
+    public void MapEndpoint(IEndpointRouteBuilder app)
+    {
+        var builder = app.MapGet("/weather", ([FromServices] GetWeatherEndpoint endpoint) => endpoint.GetWeatherAsync());
+        GetWeatherEndpoint.Configure(builder);
+    }
+}
+```

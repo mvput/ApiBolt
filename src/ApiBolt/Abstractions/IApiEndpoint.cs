@@ -3,3 +3,7 @@
 public interface IApiEndpoint
 {
 }
+
+public interface IApiEndpointConvention
+{
+}
