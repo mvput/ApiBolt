@@ -15,6 +15,8 @@
 	<RepositoryType>https://github.com/mvput/ApiBolt.git</RepositoryType>
 	<PackageTags>endpoint;repr;api;minimalapi;minimal-api</PackageTags>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+      <PackageIconUrl></PackageIconUrl>
+    <Description>ApiBolt uses incremental source generators to generate Minimal API mapping for endpoints as Request-Endpoint-Response (REPR pattern).</Description>
   </PropertyGroup>  
 
   <ItemGroup>
