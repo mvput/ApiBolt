@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
+using ApiBolt.Abstractions;
 
 namespace ApiBolt.SourceGenerator;
 
@@ -33,23 +34,24 @@ public class ApiEndpointGenerator : IIncrementalGenerator
 
         var classDeclarationSyntax = (ClassDeclarationSyntax)methodDeclarationSyntax.Parent;
 
-        if (context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol namedTypeSymbol)
+        if (context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not { } namedTypeSymbol)
             return null;
 
         var endpointName = namedTypeSymbol.Name;
-        var attributes = GetAttribute(context.SemanticModel, methodDeclarationSyntax);
+        var attributes = GetAttribute(methodDeclarationSyntax);
 
         if (attributes is null)
         {
             return null;
         }
-
+        
+        var hasConvention = namedTypeSymbol.Interfaces.Any(static n => n.Name == "IApiEndpointConvention");
         var name = methodDeclarationSyntax.Identifier.ValueText;
 
-        return new ApiEndpointToGenerate(endpointName, GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern, name, methodDeclarationSyntax.ParameterList); ;
+        return new ApiEndpointToGenerate(endpointName, GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern, name, hasConvention, methodDeclarationSyntax.ParameterList); ;
     }
 
-    private static ApiEndpointAttribute? GetAttribute(SemanticModel semanticModel, MethodDeclarationSyntax methodDeclarationSyntax)
+    private static ApiEndpointAttribute? GetAttribute(MethodDeclarationSyntax methodDeclarationSyntax)
     {
         foreach (var attributeSyntax in methodDeclarationSyntax.AttributeLists.SelectMany(attributelistSyntax => attributelistSyntax.Attributes))
         {

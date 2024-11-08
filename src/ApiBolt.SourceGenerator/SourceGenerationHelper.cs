@@ -14,6 +14,8 @@ public static class SourceGenerationHelper
                     IdentifierName("app"),
                     IdentifierName(GetMethodNameForEndpointType(value.EndpointType))));
 
+       var statements = new List<StatementSyntax>();
+
         invocation = invocation.WithArgumentList
             (
             ArgumentList(
@@ -46,9 +48,45 @@ public static class SourceGenerationHelper
                 )
             );
 
+        if (value.HasConvention)
+        {
+            var syntax = LocalDeclarationStatement(VariableDeclaration(IdentifierName(
+                Identifier(
+                    TriviaList(),
+                    SyntaxKind.VarKeyword,
+                    "var",
+                    "var",
+                    TriviaList()))).WithVariables(SingletonSeparatedList<VariableDeclaratorSyntax>(
+                VariableDeclarator(
+                        Identifier("builder"))
+                    .WithInitializer(
+                        EqualsValueClause(invocation)))));
+            
+            
+            
+            var configure =    ExpressionStatement(
+                InvocationExpression(
+                        MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            IdentifierName("GetWeatherEndpoint"),
+                            IdentifierName("Configure")))
+                    .WithArgumentList(
+                        ArgumentList(
+                            SingletonSeparatedList<ArgumentSyntax>(
+                                Argument(
+                                    IdentifierName("builder"))))));
+
+            statements.Add(syntax);
+            statements.Add(configure);
+        }
+
+        else
+        {
+            statements.Add(ExpressionStatement(invocation));
+        }
         var method = MethodDeclaration(ParseTypeName("void"), "MapEndpoint")
                        .AddModifiers(Token(SyntaxKind.PublicKeyword))
-                       .WithBody(Block(ExpressionStatement(invocation)))
+                       .WithBody(Block(statements))
                        .AddParameterListParameters(Parameter(Identifier("app")).WithType(ParseTypeName("IEndpointRouteBuilder")));
 
         var @class = ClassDeclaration($"{value.Name}Registration")
