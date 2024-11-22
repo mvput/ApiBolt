@@ -18,5 +18,6 @@ public static class ServiceCollectionExtensions
             .AsImplementedInterfaces());
     }
 
+    public static void AddApiBolt(this IServiceCollection services) => services.AddApiBolt(Assembly.GetCallingAssembly());
     public static void AddApiBolt<T>(this IServiceCollection services) => services.AddApiBolt(typeof(T).Assembly);
 }
