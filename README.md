@@ -8,8 +8,8 @@ ApiBolt uses incremental source generators to generate Minimal API mapping for e
 To use the ApiBolt source generator, install the `ApiBolt.AspNetCore` package and the `ApiBolt.SourceGenerator` package into your API project.
 
 ```powershell
-dotnet add package ApiBolt.AspNetCore --version 0.2.1
-dotnet add package ApiBolt.SourceGenerator --version 0.2.1
+dotnet add package ApiBolt.AspNetCore --version 0.3.0
+dotnet add package ApiBolt.SourceGenerator --version 0.3.0
 ```
 
 # Usage
@@ -38,7 +38,7 @@ Create a method which represents your API method, add the `ApiEndpointAttribute`
 ```c#
 internal class GetWeatherEndpoint : IApiEndpoint
 {
-    [ApiEndpoint(ApiEndpointType.Get, "/weather")]
+    [HttpGet("/weather"), ApiEndpoint]
     public string GetWeatherAsync()
     {
         return $"Current weather in AMS is 14 degrees celsius";
@@ -63,7 +63,7 @@ All the parameters passed into the method, are mapped to the API call. So for ex
 ```c#
 internal class GetWeatherForCityEndpoint : IApiEndpoint
 {
-    [ApiEndpoint(ApiEndpointType.Get, "/weather/{city}")]
+    [HttpGet("/weather/{city}"), ApiEndpoint]
     public string GetWeatherAsync(string city, [FromQuery] int temp)
     {
         return $"Current weather in {city} is {temp} degrees celsius";
@@ -86,7 +86,7 @@ To configure the endpoint after the Map, add the `IApiEndpointConvention` interf
 ```c#
 internal class GetWeatherEndpoint : IApiEndpoint, IApiEndpointConvention
 {
-    [ApiEndpoint(ApiEndpointType.Get, "/weather")]
+    [HttpGet("/weather"), ApiEndpoint]
     public string GetWeatherAsync()
     {
         return $"Current weather in AMS is 14 degrees celsius";

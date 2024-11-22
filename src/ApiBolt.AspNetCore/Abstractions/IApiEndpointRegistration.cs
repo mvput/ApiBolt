@@ -1,7 +1,4 @@
-﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 
 namespace ApiBolt.AspNetCore.Abstractions;
 

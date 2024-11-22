@@ -12,7 +12,7 @@ public static class SourceGenerationHelper
         var invocation = InvocationExpression(MemberAccessExpression(
                     SyntaxKind.SimpleMemberAccessExpression,
                     IdentifierName("app"),
-                    IdentifierName(GetMethodNameForEndpointType(value.EndpointType))));
+                    IdentifierName($"Map{value.EndpointType.ToString()}")));
 
        var statements = new List<StatementSyntax>();
 
@@ -56,7 +56,7 @@ public static class SourceGenerationHelper
                     SyntaxKind.VarKeyword,
                     "var",
                     "var",
-                    TriviaList()))).WithVariables(SingletonSeparatedList<VariableDeclaratorSyntax>(
+                    TriviaList()))).WithVariables(SingletonSeparatedList(
                 VariableDeclarator(
                         Identifier("builder"))
                     .WithInitializer(
@@ -68,11 +68,11 @@ public static class SourceGenerationHelper
                 InvocationExpression(
                         MemberAccessExpression(
                             SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("GetWeatherEndpoint"),
+                            IdentifierName(value.Name),
                             IdentifierName("Configure")))
                     .WithArgumentList(
                         ArgumentList(
-                            SingletonSeparatedList<ArgumentSyntax>(
+                            SingletonSeparatedList(
                                 Argument(
                                     IdentifierName("builder"))))));
 
@@ -111,26 +111,5 @@ public static class SourceGenerationHelper
     {
         var arguments = parameter.Parameters.Select(x => Argument(IdentifierName(x.Identifier.ValueText)));
         return ArgumentList(SeparatedList(arguments));
-    }
-
-    private static string GetMethodNameForEndpointType(ApiEndpointType apiEndpointType)
-    {
-        switch (apiEndpointType)
-        {
-            case ApiEndpointType.Get:
-                return "MapGet";
-
-            case ApiEndpointType.Post:
-                return "MapPost";
-
-            case ApiEndpointType.Delete:
-                return "MapDelete";
-
-            case ApiEndpointType.Put:
-                return "MapPut";
-
-            default:
-                return "";
-        }
     }
 }
