@@ -17,4 +17,6 @@ public static class ServiceCollectionExtensions
         services.Scan(scan => scan.FromAssemblies(assembly).AddClasses(c => c.AssignableTo<IApiEndpointRegistration>())
             .AsImplementedInterfaces());
     }
+
+    public static void AddApiBolt<T>(this IServiceCollection services) => services.AddApiBolt(typeof(T).Assembly);
 }
