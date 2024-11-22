@@ -1,5 +1,6 @@
 ﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
 
+using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -53,14 +54,18 @@ public class ApiEndpointGenerator : IIncrementalGenerator
 
     private static ApiEndpointAttribute? GetAttribute(MethodDeclarationSyntax methodDeclarationSyntax)
     {
+        if (!Debugger.IsAttached)
+        {
+            Debugger.Launch();
+        }
+        
         foreach (var attributeSyntax in methodDeclarationSyntax.AttributeLists.SelectMany(attributelistSyntax => attributelistSyntax.Attributes))
         {
             if (attributeSyntax.ArgumentList is null) continue;
 
-            var endpointType = attributeSyntax.ArgumentList.Arguments.First();
-            var pattern = attributeSyntax.ArgumentList.Arguments.Last();
+            var pattern = attributeSyntax.ArgumentList.Arguments.First();
 
-            return new ApiEndpointAttribute((ApiEndpointType)Enum.Parse(typeof(ApiEndpointType), endpointType.Expression.GetLastToken().ValueText), pattern.Expression.NormalizeWhitespace().ToFullString());
+            return new ApiEndpointAttribute((ApiEndpointType)Enum.Parse(typeof(ApiEndpointType), attributeSyntax.Name.ToFullString().Replace("Http", string.Empty)), pattern.Expression.NormalizeWhitespace().ToFullString());
         }
 
         return null;
