@@ -96,11 +96,7 @@ public static class SourceGenerationHelper
 
         var root = NamespaceDeclaration(ParseName(value.Ns))
             .AddMembers(@class)
-            .AddUsings(
-                UsingDirective(ParseName("ApiBolt.AspNetCore.Abstractions")),
-                UsingDirective(ParseName("Microsoft.AspNetCore.Mvc")),
-                UsingDirective(ParseName("Microsoft.AspNetCore.Routing"))
-            );
+            .AddUsings(GetUsings(value.Usings));
 
         return root
             .NormalizeWhitespace()
@@ -112,4 +108,34 @@ public static class SourceGenerationHelper
         var arguments = parameter.Parameters.Select(x => Argument(IdentifierName(x.Identifier.ValueText)));
         return ArgumentList(SeparatedList(arguments));
     }
+
+    private static UsingDirectiveSyntax[] GetUsings(UsingDirectiveSyntax[] valueUsings)
+    {
+        var usings = valueUsings.ToList();
+        usings.AddRange(
+            [
+            UsingDirective(ParseName("ApiBolt.AspNetCore.Abstractions")),
+            UsingDirective(ParseName("Microsoft.AspNetCore.Mvc")),
+            UsingDirective(ParseName("Microsoft.AspNetCore.Routing"))]
+            );
+
+        return usings.OrderBy(x => x.Name?.ToFullString()).DistinctBy(x => x.Name?.ToFullString()).ToArray();
+    }
+
+  
 }
+
+public static class SyntaxExtensions
+{
+    public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+        (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+    {
+        HashSet<TKey> seenKeys = [];
+        foreach (var element in source)
+        {
+            if (seenKeys.Add(keySelector(element)))
+            {
+                yield return element;
+            }
+        }
+    }}
