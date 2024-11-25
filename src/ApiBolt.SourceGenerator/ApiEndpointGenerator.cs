@@ -1,12 +1,8 @@
-﻿// Copyright (c) GRCcontrol B.V. All rights reserved.
-
-using System.Diagnostics;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.Text;
-using ApiBolt.Abstractions;
 
 namespace ApiBolt.SourceGenerator;
 
@@ -49,16 +45,11 @@ public class ApiEndpointGenerator : IIncrementalGenerator
         var hasConvention = namedTypeSymbol.Interfaces.Any(static n => n.Name == "IApiEndpointConvention");
         var name = methodDeclarationSyntax.Identifier.ValueText;
 
-        return new ApiEndpointToGenerate(endpointName, GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern, name, hasConvention, methodDeclarationSyntax.ParameterList); ;
+        return new ApiEndpointToGenerate(endpointName, GetUsings(namedTypeSymbol), GetNamespace(classDeclarationSyntax), attributes.ApiEndpointType, attributes.Pattern, name, hasConvention, methodDeclarationSyntax.ParameterList); ;
     }
 
     private static ApiEndpointAttribute? GetAttribute(MethodDeclarationSyntax methodDeclarationSyntax)
     {
-        if (!Debugger.IsAttached)
-        {
-            Debugger.Launch();
-        }
-        
         foreach (var attributeSyntax in methodDeclarationSyntax.AttributeLists.SelectMany(attributelistSyntax => attributelistSyntax.Attributes))
         {
             if (attributeSyntax.ArgumentList is null) continue;
@@ -89,19 +80,30 @@ public class ApiEndpointGenerator : IIncrementalGenerator
                && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
             potentialNamespaceParent = potentialNamespaceParent.Parent;
 
-        if (potentialNamespaceParent is BaseNamespaceDeclarationSyntax namespaceParent)
+        if (potentialNamespaceParent is not BaseNamespaceDeclarationSyntax namespaceParent) return nameSpace;
+        nameSpace = namespaceParent.Name.ToString();
+
+        while (true)
         {
-            nameSpace = namespaceParent.Name.ToString();
+            if (namespaceParent.Parent is not NamespaceDeclarationSyntax parent) break;
 
-            while (true)
-            {
-                if (namespaceParent.Parent is not NamespaceDeclarationSyntax parent) break;
-
-                nameSpace = $"{namespaceParent.Name}.{nameSpace}";
-                namespaceParent = parent;
-            }
+            nameSpace = $"{namespaceParent.Name}.{nameSpace}";
+            namespaceParent = parent;
         }
 
         return nameSpace;
+    }
+
+    private static UsingDirectiveSyntax[] GetUsings(INamedTypeSymbol symbol)
+    {
+        var allUsings = SyntaxFactory.List<UsingDirectiveSyntax>();
+        allUsings = symbol.DeclaringSyntaxReferences.SelectMany(syntaxRef => syntaxRef.GetSyntax().Ancestors(false))
+            .Aggregate(allUsings, (current, parent) => parent switch
+            {
+                NamespaceDeclarationSyntax syntax => current.AddRange(syntax.Usings),
+                CompilationUnitSyntax syntax => current.AddRange(syntax.Usings),
+                _ => current
+            });
+        return allUsings.ToArray();
     }
 }

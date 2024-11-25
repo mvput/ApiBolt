@@ -8,8 +8,8 @@ ApiBolt uses incremental source generators to generate Minimal API mapping for e
 To use the ApiBolt source generator, install the `ApiBolt.AspNetCore` package and the `ApiBolt.SourceGenerator` package into your API project.
 
 ```powershell
-dotnet add package ApiBolt.AspNetCore --version 0.3.0
-dotnet add package ApiBolt.SourceGenerator --version 0.3.0
+dotnet add package ApiBolt.AspNetCore --version 0.3.1
+dotnet add package ApiBolt.SourceGenerator --version 0.3.1
 ```
 
 # Usage
